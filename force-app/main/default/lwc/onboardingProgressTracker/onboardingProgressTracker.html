@@ -1,0 +1,52 @@
+<template>
+    <lightning-card title="Onboarding Progress" icon-name="standard:checklist">
+        <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+
+            <template lwc:if={error}>
+                <div class="slds-text-color_error">{error}</div>
+            </template>
+
+            <template lwc:elseif={hasTasks}>
+                <div class="slds-m-bottom_small">
+                    <lightning-progress-bar value={percentComplete} size="large"></lightning-progress-bar>
+                    <p class="slds-text-body_small slds-m-top_x-small">
+                        {progressLabel} ({percentComplete}%)
+                    </p>
+                </div>
+
+                <template for:each={groupedTasks} for:item="group">
+                    <div key={group.type} class="slds-m-top_medium">
+                        <h3 class="slds-text-title_caps slds-text-color_weak slds-m-bottom_x-small">
+                            {group.type}
+                        </h3>
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col">Task</th>
+                                    <th scope="col">Due Date</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={group.tasks} for:item="task">
+                                    <tr key={task.Id}>
+                                        <td>{task.Name}</td>
+                                        <td>{task.Due_Date__c}</td>
+                                        <td><span class={task.badgeClass}>{task.Status__c}</span></td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+            </template>
+
+            <template lwc:else>
+                <p class="slds-text-body_small slds-text-color_weak">
+                    No onboarding tasks yet for this employee.
+                </p>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>
