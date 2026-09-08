@@ -4,7 +4,9 @@ public class OnboardingTestDataFactory {
     public static Onboarding_Template__c createTemplateWithTasks(String department) {
         Onboarding_Template__c tmpl = new Onboarding_Template__c(
             Name = department + ' Onboarding',
-            Department__c = department
+            Department__c = department,
+            Active__c = true,
+            Version__c = 1
         );
         insert tmpl;
 

@@ -60,4 +60,53 @@ private class OnboardingTaskGeneratorTest {
         List<Onboarding_Task__c> tasks = [SELECT Id FROM Onboarding_Task__c];
         System.assertEquals(150, tasks.size(), '50 employees x 3 template tasks each');
     }
+
+    /**
+     * Mentor point 3: when HR changes an Employee's Department after creation,
+     * the new department's tasks are added, existing tasks are kept, and
+     * switching back does not create duplicates.
+     */
+    @isTest
+    static void testDepartmentChange_addsNewTasksWithoutDuplicates() {
+        // Engineering template (3 tasks from the factory)
+        OnboardingTestDataFactory.createTemplateWithTasks('Engineering');
+
+        // Sales template: the factory likely reuses the same task names, so
+        // rename the Sales template's tasks to make them distinct. We find them
+        // as "the Template Tasks that didn't exist before this call".
+        Set<Id> existingTemplateTaskIds = new Map<Id, Template_Task__c>(
+            [SELECT Id FROM Template_Task__c]
+        ).keySet();
+        OnboardingTestDataFactory.createTemplateWithTasks('Sales');
+        List<Template_Task__c> salesTemplateTasks = [
+            SELECT Id, Name FROM Template_Task__c WHERE Id NOT IN :existingTemplateTaskIds
+        ];
+        for (Template_Task__c tt : salesTemplateTasks) {
+            tt.Name = 'Sales - ' + tt.Name;
+        }
+        update salesTemplateTasks;
+
+        // Employee created in Engineering -> 3 Engineering tasks
+        Employee__c emp = OnboardingTestDataFactory.buildEmployee('Engineering', Date.today().addDays(14));
+        insert emp;
+        System.assertEquals(3, [SELECT COUNT() FROM Onboarding_Task__c WHERE Employee__c = :emp.Id],
+            'Engineering tasks should be generated on insert');
+
+        // HR corrects the department -> Sales tasks are added, Engineering tasks kept
+        Test.startTest();
+        emp.Department__c = 'Sales';
+        update emp;
+        Test.stopTest();
+
+        System.assertEquals(3 + salesTemplateTasks.size(),
+            [SELECT COUNT() FROM Onboarding_Task__c WHERE Employee__c = :emp.Id],
+            'Department change should add the new department\'s tasks and keep existing ones');
+
+        // Switching back must not duplicate the Engineering tasks
+        emp.Department__c = 'Engineering';
+        update emp;
+        System.assertEquals(3 + salesTemplateTasks.size(),
+            [SELECT COUNT() FROM Onboarding_Task__c WHERE Employee__c = :emp.Id],
+            'Switching back should not create duplicate tasks');
+    }
 }

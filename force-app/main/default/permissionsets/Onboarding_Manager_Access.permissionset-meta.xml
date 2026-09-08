@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Access for managers involved in onboarding. Read on Employees and read/edit on the tasks they act on, but no access to maintain templates and no View All Records — that is reserved for HR/admins.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Onboarding Manager Access</label>
+
+    <!-- Employees: read only. Managers review new hires but don't create/maintain them (HR task). -->
+    <objectPermissions>
+        <object>Employee__c</object>
+        <allowRead>true</allowRead>
+        <allowCreate>false</allowCreate>
+        <allowEdit>false</allowEdit>
+        <allowDelete>false</allowDelete>
+        <viewAllRecords>false</viewAllRecords>
+        <modifyAllRecords>false</modifyAllRecords>
+    </objectPermissions>
+
+    <!-- Onboarding Tasks: read + edit so managers can mark tasks complete. No delete, no View All. -->
+    <objectPermissions>
+        <object>Onboarding_Task__c</object>
+        <allowRead>true</allowRead>
+        <allowCreate>false</allowCreate>
+        <allowEdit>true</allowEdit>
+        <allowDelete>false</allowDelete>
+        <viewAllRecords>false</viewAllRecords>
+        <modifyAllRecords>false</modifyAllRecords>
+    </objectPermissions>
+
+    <!-- Templates intentionally omitted: managers get no access to
+         Onboarding_Template__c or Template_Task__c. That's HR/admin only. -->
+</PermissionSet>
