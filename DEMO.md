@@ -51,7 +51,7 @@ erDiagram
 | Document → Employee | Lookup | Documents may need to be retained for compliance even if the employee record is removed. |
 | Onboarding Template ↔ Employee | Matched by Department | Templates are resolved at runtime, so HR can change templates without touching employee records. |
 
-### Why a custom object for onboarding tasks instead of the standard Task? *(review feedback #6)*
+### Why a custom object for onboarding tasks instead of the standard Task?
 
 | Need | Standard Task (Activity) | Custom `Onboarding_Task__c` |
 |---|---|---|
@@ -98,7 +98,7 @@ Implemented in `OnboardingTaskTrigger` → `OnboardingTaskTriggerHandler` → `S
 
 ---
 
-## 4. Department change *(review feedback #3)*
+## 4. Department change
 
 **Steps:**
 1. Create an Employee with Department **Sales** → Sales tasks are created.
@@ -116,7 +116,7 @@ Implemented in `OnboardingTaskTrigger` → `OnboardingTaskTriggerHandler` → `S
 
 ---
 
-## 5. Template versioning *(review feedback #4)*
+## 5. Template versioning
 
 Onboarding Template now has **Version** and **Active** fields. The generator only uses active templates and selects the **highest version** per department, so a new checklist version can be rolled out without editing the old one or affecting existing employees.
 
@@ -124,14 +124,14 @@ Onboarding Template now has **Version** and **Active** fields. The generator onl
 
 ---
 
-## 6. Role-based permission sets *(review feedback #1)*
+## 6. Role-based permission sets
 
 | Permission set | For | Access |
 |---|---|---|
 | `Onboarding_Portal_Access` (HR) | HR / onboarding admins | Full CRUD on onboarding objects, including maintaining templates (incl. Active / Version fields) |
 | `Onboarding_Manager_Access` | Managers | Read Employees, read/edit Onboarding Tasks, access to the progress tracker. No template access |
 
-**View All Records has been removed from both permission sets.** Record visibility now comes from org-wide defaults and sharing instead of a blanket override; Onboarding Tasks and Template Tasks inherit visibility from their parent (Controlled by Parent).
+**Neither permission set grants View All Records.** Record visibility now comes from org-wide defaults and sharing instead of a blanket override; Onboarding Tasks and Template Tasks inherit visibility from their parent (Controlled by Parent).
 
 ---
 
@@ -147,7 +147,7 @@ Onboarding Template now has **Version** and **Active** fields. The generator onl
 
 ## 8. Code quality and tests
 
-- ApexDoc on every Apex class, trigger and test method *(review feedback #2)*
+- ApexDoc on every Apex class, trigger and test method
 - No SOQL or DML inside loops
 - New test: `testDepartmentChange_addsNewTasksWithoutDuplicates`
 - Bulk test: `testBulkInsert` (50 employees in one transaction)
@@ -171,6 +171,6 @@ sf apex run test --code-coverage --result-format human --wait 10
 
 ---
 
-## Missing metadata *(review feedback #5)*
+## Included metadata
 
-The HR intake Flow, both reports and the dashboard are now included in the repo under `force-app/main/default/flows`, `reports` and `dashboards`.
+The HR intake Flow, both reports and the dashboard are included in the repo under `force-app/main/default/flows`, `reports` and `dashboards`.

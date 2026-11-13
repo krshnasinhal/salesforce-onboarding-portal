@@ -12,7 +12,7 @@ trigger EmployeeTrigger on Employee__c (after insert, after update) {
     }
 
     if (Trigger.isAfter && Trigger.isUpdate) {
-        // Mentor point 3: if an Employee's Department is changed after creation
+        // If an Employee's Department is changed after creation
         // (e.g. HR corrected a mistake), generate tasks for the NEW department.
         // Only Employees whose Department actually changed are passed through,
         // so unrelated field edits don't trigger task generation.

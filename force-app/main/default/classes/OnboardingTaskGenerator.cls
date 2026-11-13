@@ -8,11 +8,11 @@
  * Bulk-safe: handles any number of Employees in a single trigger invocation
  * with a fixed number of SOQL queries (no queries inside loops).
  *
- * Template selection (mentor point 4): when a Department has more than one
+ * Template selection: when a Department has more than one
  * template, only Active templates are considered and the highest Version__c
  * wins, so templates can evolve without breaking historical data.
  *
- * Duplicate guard (mentor point 3): tasks are only created if the Employee
+ * Duplicate guard: tasks are only created if the Employee
  * doesn't already have a task with that name, so changing an Employee's
  * Department adds the new department's tasks without duplicating existing ones.
  */

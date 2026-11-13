@@ -78,7 +78,7 @@ private class OnboardingTaskGeneratorTest {
     }
 
     /**
-     * Mentor point 3: when HR changes an Employee's Department after creation,
+     * When HR changes an Employee's Department after creation,
      * the new department's tasks are added, existing tasks are kept, and
      * switching back does not create duplicates.
      */
