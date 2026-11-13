@@ -5,6 +5,14 @@
  */
 public with sharing class StatusRollupService {
 
+    /**
+     * Checks each given Employee's tasks and, if all are Completed, sets the
+     * Employee's Status to "Onboarded" and stamps Onboarded_Date__c with today.
+     * Employees with no tasks, or already Onboarded, are left unchanged.
+     * Bulk-safe: two queries and one update regardless of how many Ids are passed.
+     *
+     * @param employeeIds Ids of Employees whose tasks were just completed
+     */
     public static void rollupEmployeeStatus(Set<Id> employeeIds) {
         if (employeeIds.isEmpty()) {
             return;

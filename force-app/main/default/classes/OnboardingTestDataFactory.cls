@@ -1,6 +1,17 @@
+/**
+ * Shared test data builders used by all onboarding test classes.
+ */
 @isTest
 public class OnboardingTestDataFactory {
 
+    /**
+     * Inserts an active (Version 1) Onboarding Template for a department with
+     * three Template Tasks: Send Welcome Email (HR, 0 days), Provision Laptop
+     * (IT, 3 days) and 1:1 With Manager (Manager, 5 days).
+     *
+     * @param department Department value for the template
+     * @return The inserted Onboarding_Template__c
+     */
     public static Onboarding_Template__c createTemplateWithTasks(String department) {
         Onboarding_Template__c tmpl = new Onboarding_Template__c(
             Name = department + ' Onboarding',
@@ -35,6 +46,14 @@ public class OnboardingTestDataFactory {
         return tmpl;
     }
 
+    /**
+     * Builds (does not insert) an Employee with status Offer Accepted and the
+     * running user as Manager, so callers control when the trigger fires.
+     *
+     * @param department  Department value for the Employee
+     * @param joiningDate Joining date used to calculate task due dates
+     * @return An unsaved Employee__c record
+     */
     public static Employee__c buildEmployee(String department, Date joiningDate) {
         return new Employee__c(
             Name = 'Test Employee',

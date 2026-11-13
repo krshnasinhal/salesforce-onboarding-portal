@@ -1,6 +1,12 @@
+/**
+ * Unit tests for StatusRollupService (Employee status roll-up).
+ */
 @isTest
 private class StatusRollupServiceTest {
 
+    /**
+     * Completing every task flips the Employee's Status to Onboarded.
+     */
     @isTest
     static void testEmployeeFlipsToOnboardedWhenAllTasksComplete() {
         OnboardingTestDataFactory.createTemplateWithTasks('Engineering');
@@ -21,6 +27,9 @@ private class StatusRollupServiceTest {
         System.assertEquals('Onboarded', updated.Status__c);
     }
 
+    /**
+     * Completing only some tasks leaves the Employee In Progress.
+     */
     @isTest
     static void testEmployeeStaysInProgressWhenPartiallyComplete() {
         OnboardingTestDataFactory.createTemplateWithTasks('Engineering');

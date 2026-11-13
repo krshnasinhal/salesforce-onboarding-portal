@@ -12,6 +12,13 @@
  */
 public with sharing class OnboardingEmailService {
 
+    /**
+     * Emails the Employee's Manager for each newly created onboarding task.
+     * Re-queries the tasks to load the Manager's name and email, and skips
+     * any task whose Employee has no Manager or whose Manager has no email.
+     *
+     * @param tasks Newly inserted Onboarding_Task__c records (from trigger context)
+     */
     public static void sendTaskCreatedEmails(List<Onboarding_Task__c> tasks) {
         List<Onboarding_Task__c> tasksWithManagers = [
             SELECT Id, Name, Due_Date__c, Employee__r.Manager__r.Email, Employee__r.Manager__r.Name
@@ -38,6 +45,13 @@ public with sharing class OnboardingEmailService {
         sendEmails(emails);
     }
 
+    /**
+     * Emails the Employee's Manager a reminder for each task that is due soon.
+     * Expects the caller to have already queried Employee__r.Manager__r.Email
+     * and Employee__r.Manager__r.Name on each task.
+     *
+     * @param tasks Onboarding_Task__c records due in 2 days, with Manager fields populated
+     */
     public static void sendReminderEmails(List<Onboarding_Task__c> tasks) {
         List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
         for (Onboarding_Task__c t : tasks) {
@@ -60,6 +74,13 @@ public with sharing class OnboardingEmailService {
         sendEmails(emails);
     }
 
+    /**
+     * Sends the given emails in a single call (one email invocation regardless
+     * of list size). Does nothing for an empty list, and skips the actual send
+     * during tests so unit tests don't consume the org's daily email limit.
+     *
+     * @param emails Emails to send
+     */
     private static void sendEmails(List<Messaging.SingleEmailMessage> emails) {
         if (emails.isEmpty()) {
             return;

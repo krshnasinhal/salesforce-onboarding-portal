@@ -1,6 +1,13 @@
+/**
+ * Unit tests for the OnboardingReminderScheduler scheduled job.
+ */
 @isTest
 private class OnboardingReminderSchedulerTest {
 
+    /**
+     * Schedules the job with tasks that are Not Started and due in 2 days;
+     * the job runs at Test.stopTest() and sends reminders without errors.
+     */
     @isTest
     static void testScheduledJobSendsRemindersForTasksDueInTwoDays() {
         OnboardingTestDataFactory.createTemplateWithTasks('Engineering');
@@ -25,6 +32,9 @@ private class OnboardingReminderSchedulerTest {
         // Job enqueued and executed at stopTest; no exception = success.
     }
 
+    /**
+     * Running the job when no tasks are due is a no-op without errors.
+     */
     @isTest
     static void testExecuteDirectly_noMatchingTasks() {
         Test.startTest();

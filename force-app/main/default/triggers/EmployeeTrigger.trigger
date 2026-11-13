@@ -1,3 +1,8 @@
+/**
+ * Employee__c trigger. Delegates to OnboardingTaskGenerator to create
+ * onboarding tasks when an Employee is inserted, and again when an
+ * Employee's Department changes.
+ */
 trigger EmployeeTrigger on Employee__c (after insert, after update) {
 
     if (Trigger.isAfter && Trigger.isInsert) {

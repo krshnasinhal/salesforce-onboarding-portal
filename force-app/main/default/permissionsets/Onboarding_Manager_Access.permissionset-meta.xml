@@ -28,4 +28,11 @@
 
     <!-- Templates intentionally omitted: managers get no access to
          Onboarding_Template__c or Template_Task__c. That's HR/admin only. -->
+
+    <!-- Needed so the onboarding progress tracker LWC works for managers
+         on the Employee record page. -->
+    <classAccesses>
+        <apexClass>OnboardingProgressController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
 </PermissionSet>

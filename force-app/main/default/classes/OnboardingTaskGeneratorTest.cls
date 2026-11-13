@@ -1,6 +1,14 @@
+/**
+ * Unit tests for OnboardingTaskGenerator and EmployeeTrigger: task generation
+ * on insert, no-template handling, bulk inserts and department changes.
+ */
 @isTest
 private class OnboardingTaskGeneratorTest {
 
+    /**
+     * Inserting an Employee creates one task per template task, with Due Date
+     * = Joining Date + Days to Complete, and moves the Employee to In Progress.
+     */
     @isTest
     static void testTasksGeneratedFromTemplate() {
         OnboardingTestDataFactory.createTemplateWithTasks('Engineering');
@@ -27,6 +35,10 @@ private class OnboardingTaskGeneratorTest {
         System.assertEquals('In Progress', updated.Status__c, 'Status should flip once first task is created');
     }
 
+    /**
+     * An Employee whose Department has no template gets no tasks and keeps
+     * the Offer Accepted status.
+     */
     @isTest
     static void testNoMatchingTemplate_noTasksCreated() {
         Date joinDate = Date.today().addDays(7);
@@ -43,6 +55,10 @@ private class OnboardingTaskGeneratorTest {
         System.assertEquals('Offer Accepted', updated.Status__c, 'Status should not change with no tasks');
     }
 
+    /**
+     * Inserting 50 Employees in one transaction creates 150 tasks without
+     * hitting governor limits (bulkification check).
+     */
     @isTest
     static void testBulkInsert() {
         OnboardingTestDataFactory.createTemplateWithTasks('Sales');

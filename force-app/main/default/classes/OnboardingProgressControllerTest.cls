@@ -1,6 +1,13 @@
+/**
+ * Unit tests for OnboardingProgressController.getProgress.
+ */
 @isTest
 private class OnboardingProgressControllerTest {
 
+    /**
+     * With 1 of 3 tasks Completed, the controller returns 3 total tasks,
+     * 1 completed and 33% complete.
+     */
     @isTest
     static void testGetProgress_partiallyComplete() {
         OnboardingTestDataFactory.createTemplateWithTasks('Engineering');
@@ -21,6 +28,10 @@ private class OnboardingProgressControllerTest {
         System.assertEquals(3, result.tasks.size());
     }
 
+    /**
+     * An Employee with no tasks returns 0 tasks and 0% complete
+     * (no divide-by-zero).
+     */
     @isTest
     static void testGetProgress_noTasks() {
         Employee__c emp = OnboardingTestDataFactory.buildEmployee('Marketing', Date.today());

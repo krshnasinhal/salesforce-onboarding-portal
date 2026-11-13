@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
-    <label>Onboarding Portal Access</label>
-    <description>Full CRUD on onboarding objects + access to Apex classes and the progress tracker LWC.</description>
+    <label>Onboarding Portal Access (HR)</label>
+    <description>For HR / onboarding admins. Full CRUD on onboarding objects, including maintaining templates. No View All Records: record visibility comes from org-wide defaults and sharing.</description>
 
     <objectPermissions>
         <object>Employee__c</object>
@@ -9,7 +9,7 @@
         <allowRead>true</allowRead>
         <allowEdit>true</allowEdit>
         <allowDelete>true</allowDelete>
-        <viewAllRecords>true</viewAllRecords>
+        <viewAllRecords>false</viewAllRecords>
         <modifyAllRecords>false</modifyAllRecords>
     </objectPermissions>
     <objectPermissions>
@@ -18,7 +18,7 @@
         <allowRead>true</allowRead>
         <allowEdit>true</allowEdit>
         <allowDelete>true</allowDelete>
-        <viewAllRecords>true</viewAllRecords>
+        <viewAllRecords>false</viewAllRecords>
         <modifyAllRecords>false</modifyAllRecords>
     </objectPermissions>
     <objectPermissions>
@@ -27,7 +27,7 @@
         <allowRead>true</allowRead>
         <allowEdit>true</allowEdit>
         <allowDelete>true</allowDelete>
-        <viewAllRecords>true</viewAllRecords>
+        <viewAllRecords>false</viewAllRecords>
         <modifyAllRecords>false</modifyAllRecords>
     </objectPermissions>
     <objectPermissions>
@@ -36,7 +36,7 @@
         <allowRead>true</allowRead>
         <allowEdit>true</allowEdit>
         <allowDelete>true</allowDelete>
-        <viewAllRecords>true</viewAllRecords>
+        <viewAllRecords>false</viewAllRecords>
         <modifyAllRecords>false</modifyAllRecords>
     </objectPermissions>
     <objectPermissions>
@@ -45,11 +45,14 @@
         <allowRead>true</allowRead>
         <allowEdit>true</allowEdit>
         <allowDelete>true</allowDelete>
-        <viewAllRecords>true</viewAllRecords>
+        <viewAllRecords>false</viewAllRecords>
         <modifyAllRecords>false</modifyAllRecords>
     </objectPermissions>
 
     <fieldPermissions><field>Employee__c.Manager__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+
+    <fieldPermissions><field>Onboarding_Template__c.Active__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
+    <fieldPermissions><field>Onboarding_Template__c.Version__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
 
     <fieldPermissions><field>Document__c.Document_Type__c</field><readable>true</readable><editable>true</editable></fieldPermissions>
 

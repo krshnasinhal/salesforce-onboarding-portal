@@ -51,6 +51,18 @@ erDiagram
 | Document → Employee | Lookup | Documents may need to be retained for compliance even if the employee record is removed. |
 | Onboarding Template ↔ Employee | Matched by Department | Templates are resolved at runtime, so HR can change templates without touching employee records. |
 
+### Why a custom object for onboarding tasks instead of the standard Task? *(review feedback #6)*
+
+| Need | Standard Task (Activity) | Custom `Onboarding_Task__c` |
+|---|---|---|
+| Master-Detail to Employee (cascade delete, inherited sharing, roll-up summaries) | Not possible: Task links to records through the polymorphic `WhatId`/`WhoId` fields | Yes |
+| Custom lookup fields (e.g. to templates or documents) | Not supported on Activity | Yes |
+| Long-term history for onboarding reports | Tasks are archived after ~365 days and drop out of standard queries and reports | Kept indefinitely |
+| Reporting | Limited Activity report types | Own report type (used by *Open Overdue Tasks by Type*) |
+| Separation from sales work | Mixed into users' *My Tasks*, calendar and activity timelines | Isolated onboarding checklist |
+
+**Trade-off:** the custom object gives up Task's built-in reminders, *My Tasks* list and mobile notifications. These are replaced by `OnboardingEmailService` (new-task emails to the Manager) and `OnboardingReminderScheduler` (reminders 2 days before the due date).
+
 ---
 
 ## 1. Task generation on employee creation
@@ -116,8 +128,10 @@ Onboarding Template now has **Version** and **Active** fields. The generator onl
 
 | Permission set | For | Access |
 |---|---|---|
-| `Onboarding_Portal_Access` | HR / admins | Full access to onboarding objects, including templates |
-| `Onboarding_Manager_Access` | Managers | Read Employees, read/edit Onboarding Tasks. No template access, no View All Records |
+| `Onboarding_Portal_Access` (HR) | HR / onboarding admins | Full CRUD on onboarding objects, including maintaining templates (incl. Active / Version fields) |
+| `Onboarding_Manager_Access` | Managers | Read Employees, read/edit Onboarding Tasks, access to the progress tracker. No template access |
+
+**View All Records has been removed from both permission sets.** Record visibility now comes from org-wide defaults and sharing instead of a blanket override; Onboarding Tasks and Template Tasks inherit visibility from their parent (Controlled by Parent).
 
 ---
 
@@ -133,7 +147,7 @@ Onboarding Template now has **Version** and **Active** fields. The generator onl
 
 ## 8. Code quality and tests
 
-- ApexDoc on `OnboardingTaskGenerator` *(review feedback #2)*
+- ApexDoc on every Apex class, trigger and test method *(review feedback #2)*
 - No SOQL or DML inside loops
 - New test: `testDepartmentChange_addsNewTasksWithoutDuplicates`
 - Bulk test: `testBulkInsert` (50 employees in one transaction)
